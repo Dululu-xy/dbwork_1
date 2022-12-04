@@ -1,66 +1,8 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-<meta name="description" content="Smarthr - Bootstrap Admin Template">
-<meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
-<meta name="author" content="Dreamguys - Bootstrap Admin Template">
-<meta name="robots" content="noindex, nofollow">
-<title>Login - HRMS admin template</title>
-
-<link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.png">
-<link rel="stylesheet" href="../static/css/custom-forms.css" />
-<link rel="stylesheet" href="../static/css/tailwind-dist.css">
-</head>
-<body class="font-CircularStd bg-body flex items-center">
-
-<div class="main-wrapper media-max-w-xs:flex-col flex flex-wrap justify-center w-full">
-
-<div class="page-wrapper">
-<div class="py-5 media-max-w-xs:px-3">
-
-<div class="text-center mb-[30px]">
-<a href="admin-dashboard.html"><img src="../static/images/logo2.png" alt="Dreamguy's Technologies" class="w-[100px] mx-auto"></a>
-</div>
-
-<div class="bg-white shadow-header border border-cardBorder rounded w-full sm:w-[480px] mx-auto overflow-hidden">
-<div class="p-[30px]">
-<h3 class="text-[26px] mb-[5px] text-center">Login</h3>
-<p class="text-[#4c4c4c] text-lg mb-[30px] text-center">Access to our dashboard</p>
-
-<form action="admin-dashboard.html">
-<div class="mb-[25px]">
-<label class="text-base mb-[5px]">Email Address</label>
-<input class="block w-full inputStyle !bg-[#fbfbfb]" type="text" value="admin@example.com">
-</div>
-<div class="mb-[25px]">
-<div class="flex items-center justify-between">
-<div>
-<label class="text-base mb-[5px]">Password</label>
-</div>
-<div>
-<a class="text-muted mb-[5px]" href="forgot-password.html">
-Forgot password?
-</a>
-</div>
-</div>
-<input class="block w-full inputStyle !bg-[#fbfbfb]" type="password" value="12345">
-</div>
-<div class="mb-[25px] text-center">
-<button class="bg-gradient-to-r from-[#ff9b44] to-[#fc6075] text-white rounded block text-[22px] px-[26px] py-[10px] w-full hover:opacity-80" type="submit">Login</button>
-</div>
-<div class="text-center">
-<p>Don't have an account yet? <a href="register.html" class="text-primary">Register</a>
-</p>
-</div>
-</form>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+     <h3 class="text-pageTitle text-lg sm:text-2xl md:text-[26px] font-medium sm:mb-[5px] leading-[1.2]">
+                            Welcome Admin!</h3>
+                        <ul class="hidden text-[14px] md:text-base font-medium sm:flex flex-wrap">
+                            <li class="text-[#6c757d]">Dashboard</li>
+                        </ul>
+{% endblock %}

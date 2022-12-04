@@ -2,9 +2,11 @@
 {% block content %}
     <div  style="left: 0px">
         <div>
-            <input type="button" id=btnAdd value="添加信息" class="btn btn-primary">
+            <input type="button" id=btnAdd value="添加" class="btn btn-primary">
+            <input type="button" id=btnSearch value="查询" class="btn btn-primary">
         </div>
     </div>
+
 
     <!-- 新建弹出框  两种方式可以调用 一个是按钮属性，一个是通过js方式调用-->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="top:20px" >
@@ -59,7 +61,21 @@
     </div>
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading"><h3 class="panel-title">任务列表</h3></div>
+        <div class="panel-heading">
+         <span class="glyphicon glyphicon-eye-open" aria-hidden="true">毕业生信息</span>
+            </div>
+            <div style="float:right;width: 300px">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name='q' class="form-control" placeholder="Search for..." value="{{ search_data }}">
+                        <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+      </span>
+                         </div>
+                </form>
+        </div>
         <div class="panel-body">
             <table class="table table-bordered">
                 <thead>
@@ -75,6 +91,7 @@
                     <th>单位性质</th>
                     <th>单位类型</th>
                     <th>行业性质</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -118,6 +135,7 @@
             bindBtnDeleteEvent();
             bindBtnConfirmDeleteEvent();
             bindBtnEditEvent();
+            bindBtnSearchEvent();
         })
 
         function bindBtnAddEvent() {
@@ -140,6 +158,9 @@
                     do_Add();
                 }
             });
+        }
+        function bindBtnSearchEvent(){
+    bindBtnSearchEvent
         }
 
         function do_Add() {

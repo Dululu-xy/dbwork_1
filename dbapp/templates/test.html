@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" type="../static/image/x-icon" href="../static/images/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/all.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/line-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'charts/morris/morris.css'%}">
+    <link rel="stylesheet" href="{% static 'ss/custom-forms.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/index.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/tailwind-dist.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container">
+        <div>
+            <input type="button" id=btnAdd value="添加信息" class="btn btn-primary">
+        </div>
+    </div>
+
+    <!-- 新建弹出框  两种方式可以调用 一个是按钮属性，一个是通过js方式调用-->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h3 class="panel-title">任务列表</h3></div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>订单号</th>
+                    <th>商品名称</th>
+                    <th>价格</th>
+                    <th>状态</th>
+                    <th>用户</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.id }}</td>
+                        <td>{{ obj.order_id }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.price }}</td>
+                        <td>{{ obj.get_status_display }}</td>
+                        <td>{{ obj.user_id }}</td>
+                        <td>
+                            <input type="button" uid="{{ obj.id }}" class="btn btn-xs btn-edit" value="编辑">
+                            <input type="button" uid="{{ obj.id }}" class="btn  btn-danger btn-xs btn-delete"
+                                   value="删除">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+<script src="{% static 'js/jquery-3.6.0.min.js '%} "></script>
+<script src="{% static 'js/alpine.min.js'%}" defer></script>
+<script src="{% static 'charts/morris/morris.min.js'%}"></script>
+<script src="{% static 'charts/raphael/raphael.min.js'%}"></script>
+<script src="{% static 'static/js/chart.js'%}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/app.js'%}"></script>
+    <script type="text/javascript">
+        var Delete_ID;
+        var Edit_ID;
+        $(function () {
+            bindBtnAddEvent();
+            bindBtnSaveEvent();
+            bindBtnDeleteEvent();
+            bindBtnConfirmDeleteEvent();
+            bindBtnEditEvent();
+        })
+
+        function bindBtnAddEvent() {
+            $("#btnAdd").click(function () {
+                //首先将正在编辑的ID制成空
+                Edit_ID = undefined;
+               // $('#formorder')[0].reset();
+                //设置对话框的标题
+               // $('#myModalLabel').text('添加信息');
+                $('#myModal').modal('show');
+            });
+        }
+
+        function bindBtnSaveEvent() {
+            $('#btnSave').click(function () {
+                $('.error_msg').empty()
+                if (Edit_ID) {
+                    do_Edit();
+                } else {
+                    do_Add();
+                }
+            });
+        }
+
+        function do_Add() {
+            $.ajax({
+                url: '/order/add/',
+                type: 'post',
+                data: $('#formorder').serialize(),
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        //alert('添加成功')
+                        $('#formorder')[0].reset();//清空表单
+                        $('#myModal').modal('hide');//关闭对话框
+                        location.reload()//这是刷新页面
+                    } else {
+                        $.each(res.error, function (name, data) {
+                            $('#id_' + name).next().text(data[0]);
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>

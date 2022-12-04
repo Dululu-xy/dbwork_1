@@ -1,0 +1,190 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="Smarthr - Bootstrap Admin Template">
+    <meta name="keywords"
+          content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>毕业生就业管理系统</title>
+
+    <link rel="shortcut icon" type="../static/image/x-icon" href="../static/images/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/all.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/line-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'charts/morris/morris.css'%}">
+    <link rel="stylesheet" href="{% static 'ss/custom-forms.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/index.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'css/tailwind-dist.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+</head>
+
+<body @click.away="modal=false" class="font-CircularStd bg-body" x-cloak x-data="{modal:false}">
+<div class="main-wrapper">
+    <header class="fixed left-0 right-0 top-0 bg-gradient-to-r from-[#ff9b44] to-[#fc6075] h-[60px] flex items-center border-b border-transparent shadow-header z-[9999]">
+
+        <div class="logo media-max-w-md:max-w-full max-w-[230px] w-full media-max-w-md:absolute px-5 transition-all ease-in-out duration-[0.2s]">
+            <a href="/">
+                <img alt="logo" class="w-[40px] h-[40px] mx-auto" src="{% static 'images/logo.png'%}">
+            </a>
+        </div>
+        <a class="media-max-w-md:hidden flex px-[10px]" href="javascript:;" id="toggle_btn">
+         <span class="bar-icon inline-block w-[21px]">
+         <span class="w-[21px] h-[2px] bg-white mb-[5px] block float-left"></span>
+         <span class="w-[15px] h-[2px] bg-white mb-[5px] block float-left"></span><span class="w-[21px] h-[2px] bg-white block float-left"></span>
+         </span>
+         </a>
+         <div class="px-5 media-max-w-lg:hidden">
+            <h3 class="text-[20px] font-normal text-white leading-[1.2]">毕业生信息管理系统</h3>
+        </div>
+        <a class="media-min-w-md:hidden px-5 w-[60px] h-[60px] leading-[60px] absolute top-0 left-0 text-white text-2xl"
+           href="#sidebar"
+           id="mobile_btn"><i class="fa fa-bars"></i></a>
+        <div class="ml-auto">
+            <ul class="hidden sm:flex items-center">
+
+                <li>
+                    <div class="relative" x-data="{mobSearch:false}">
+                        <a @click="mobSearch = ! mobSearch"
+                           class="media-min-w-md:hidden inline-block h-[60px] leading-[60px] text-white text-xl sm:px-[10px] md:px-[15px] responsive-search"
+                           href="javascript:void(0);">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <form action="javascript:;" class="flex items-center w-[230px] absolute left-0 mt-[10px] z-50"
+                              x-show="mobSearch">
+                            <input class="bg-white w-full h-[40px] py-[10px] pl-[15px] pr-[50px] border border-[#e3e3e3] rounded-[50px] text-[#333333] placeholder:text-blackOverlay outline-none focus:outline-none"
+                                   placeholder="Search here" type="text">
+                            <button class="flex absolute right-3" type="submit">
+                                <i class="fa fa-search text-[#333333]"></i>
+                            </button>
+                        </form>
+                        <form action="javascript:;" class=" media-max-w-md:hidden flex items-center w-[230px] relative">
+                            <input class="bg-searchbg !border-transparent focus:ring-0 w-full h-[40px] py-[10px] pl-[15px] pr-[50px] rounded-[50px] text-white placeholder:text-whiteOpacity outline-none focus:outline-none"
+                                   placeholder="Search here" type="text">
+                            <button class="flex absolute right-3" type="submit">
+                                <i class="fa fa-search text-whiteOpacity"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+
+                <li @click.away="profile=false" class="relative" x-data="{profile:false}">
+                    <a :class="{'after:rotate-180 after:pl-[0px] after:pr-[5px]':profile === true, 'after:rotate-0': profile === false}"
+                       @click="profile = ! profile"
+                       class="sm:px-[10px] md:px-[15px] text-white flex items-center h-[60px] hover:bg-blackOpacity focus:bg-blackOpacity after:media-max-w-md:hidden after:content-['\f107'] after:font-FontAwesome after:pl-[5px] after:text-[20px] after:transition-all after:ease-in-out after:duration-[0.2s]"
+                       href="javascript:;">
+                        <div class="inline-block relative leading-[60px] h-[60px] media-min-w-md:mr-2"><img
+                                alt="" class="inline-block w-[30px] h-[30px] rounded-full"
+                                src="../static/images/profiles/avatar-21.jpg"><span
+                                class="w-[10px] h-[10px] bg-statusOnline rounded-full border-2 border-white absolute right-0 bottom-3"></span>
+                        </div>
+                        <span class="media-max-w-md:hidden text-[15px] leading-[60px]">管理员</span></a>
+                    <div class="py-2 bg-white absolute right-0 border border-dropdownBorder shadow rounded-sm min-w-[130px] max-h-[150px] overflow-y-auto z-50"
+                         x-show="profile">
+                        <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                           href="profile.html">my
+                            profile</a>
+                        <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                           href="settings.html">settings</a>
+                        <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                           href="login.html">logout</a>
+                    </div>
+                </li>
+            </ul>
+
+
+            <div @click.away="profile=false" class="block sm:hidden relative" x-data="{profile:false}">
+                <a @click="profile = ! profile" class="text-white flex items-center h-[60px] px-5"
+                   href="javascript:;"><i class="fa fa-ellipsis-v text-2xl"></i></a>
+                <div class="py-2 bg-white absolute right-0 media-max-w-xs:right-[18px] border border-dropdownBorder shadow rounded-sm min-w-[120px] max-h-[150px] overflow-y-auto z-50"
+                     x-show="profile">
+                    <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                       href="profile.html">My Profile</a>
+                    <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                       href="settings.html">Settings</a>
+                    <a class="px-3 py-1 flex items-center text-[13px] capitalize hover:text-dropdownColor hover:bg-dropdownhoverColor"
+                       href="login.html">Logout</a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <div class="sidebar bg-sidebar media-max-w-md:-ml-[225px] media-max-w-md:w-[225px] transition-all ease-in-out duration-[0.2s] w-[230px] fixed top-[60px] bottom-0 left-0 py-[10px] z-[401]"
+         id="sidebar">
+        <div class="h-full pb-5 scrollbar-thin scrollbar-thumb-scrollbar scroll">
+            <div class="sidebar-menu" id="sidebar-menu">
+                <ul>
+                    <li class="menu-title">
+                        <span>基本信息</span>
+                    </li>
+                    <li class="submenu relative">
+                        <a href="javascript:;"><i class="la la-dashboard"></i> <span>本科生</span> <span
+                                class="absolute right-[10px]"><span
+                                class="material-icons text-lg menu-arrow transition-all ease-in-out duration-[0.2s]">navigate_next</span>
+</span></a>
+                        <ul style="display: none;">
+                            <li><a class="active" href="/undergrade/list">本科生信息</a></li>
+                            <li><a href="/test/">测试</a></li>
+                            <li><a href="employee-dashboard.html">导出</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu relative">
+                        <a href="javascript:;"><i class="la la-dashboard"></i> <span>研究生</span> <span
+                                class="absolute right-[10px]"><span
+                                class="material-icons text-lg menu-arrow transition-all ease-in-out duration-[0.2s]">navigate_next</span>
+</span></a>
+                        <ul style="display: none;">
+                            <li><a class="active" href="layout.html">研究生信息</a></li>
+                            <li><a href="employee-dashboard.html">导入</a></li>
+                            <li><a href="employee-dashboard.html">导出</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>统计</span>
+                    </li>
+                    <li class="submenu relative">
+                        <a class="noti-dot before:w-[5px] before:h-[5px] before:bg-primary before:border-[5px] before:border-primary before:rounded-[30px] before:absolute before:right-[37px] before:top-[15px] after:border-[3px] after:border-primary after:bg-transparent after:rounded-[60px] after:w-3 after:h-3 after:absolute after:top-[14px] after:right-[36px] after:animate-customPulse"
+                           href="javascript:;">
+                            <i class="la la-user"></i> <span> Employees</span> <span class="absolute right-[10px]"></span>
+                            <span
+                                class="material-icons text-lg menu-arrow transition-all ease-in-out duration-[0.2s]">navigate_next</span>
+                        </a>
+                        <ul style="display: none;">
+                            <li><a href="employees.html">All Employees</a></li>
+                            <li><a href="holidays.html">Holidays</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+     <div class="page-wrapper flex-1 relative left-0 pt-[60px] media-min-w-md:ml-[230px]">
+        <div class="p-[15px] sm:p-[10px]">
+            <div class="page-header mb-[1.875rem]">
+                <div class="flex items-center justify-between">
+                    <div style="width: 100%;top:0px">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+
+
+</div>
+<script src="{% static 'js/jquery-3.6.0.min.js '%} "></script>
+<script src="{% static 'js/alpine.min.js'%}" defer></script>
+<script src="{% static 'charts/morris/morris.min.js'%}"></script>
+<script src="{% static 'charts/raphael/raphael.min.js'%}"></script>
+<script src="{% static 'static/js/chart.js'%}"></script>
+<script src="{% static 'js/app.js'%}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

@@ -22,5 +22,6 @@ urlpatterns = [
     path('', views.login.login, name='login'), # 网站首页
     path('index/', views.login.index,name='index'),
     path('undergrade/list/', views.undergrade.undergrade_list),
+    path('undergrade/add/', views.undergrade.undergrade_add),
     path('test/', views.login.test),
 ]

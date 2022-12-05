@@ -1,9 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from dbapp import models
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from dbapp.utils.pagination import  Pagination
+from  dbapp.utils.bootstrap import BootstrapModelForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 def undergrade_list(request):
     data_dict = {}
     search_data = request.GET.get('q', "")
@@ -18,16 +22,22 @@ def undergrade_list(request):
         "queryset": page_object.page_queryset,  # 分完页的数据
         "page_string": page_object.html() }#页码html
     return render(request, 'undergrade_list.html',context)
-class Undergrade_form(forms.ModelForm):
-    #自定义属性格式，后面会校验 方式1
-    moblie=forms.CharField(min_length=11,label='号码',
-        validators=[RegexValidator(r'^1[3-9]\d{9}$','号码格式错误')])
+class Undergrade_form(BootstrapModelForm):
     class Meta:
         model=models.Undergraduate
         fields='__all__'
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        for name,filed in self.fields.items():
-            filed.widget.attrs={'class':'form-control'}
+@csrf_exempt
 def undergrade_add(request):
-    pass
+    form = Undergrade_form(data=request.POST)
+    print(request.POST)
+    if form.is_valid():
+        # 拼接订单号 自动生成
+        form.save()
+        data = {'status': True}
+        return HttpResponse(json.dumps(data))
+    else:
+        data = {
+            'status': False,
+            'error': form.errors
+        }
+        return HttpResponse(json.dumps(data, ensure_ascii=False))

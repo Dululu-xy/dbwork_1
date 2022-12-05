@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'dbwork_1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_efds',
+        'NAME': 'dbwork_1',
         'USER': 'root',
         'PASSWORD':'xy20002000&LXL',
         'HOST': '47.111.130.10',

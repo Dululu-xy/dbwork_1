@@ -160,7 +160,10 @@
             });
         }
         function bindBtnSearchEvent(){
-    bindBtnSearchEvent
+            $('#btnSearch').click(function (){
+                $('#myModalLabel').text('高级搜索');
+                $('#myModal').modal('show');
+            });
         }
 
         function do_Add() {
@@ -186,7 +189,7 @@
 
         function do_Edit() {
             $.ajax({
-                url: '/order/edit/' + '?uid=' + Edit_ID,
+                url: '/undergrade/edit/' + '?uid=' + Edit_ID,
                 type: 'post',
                 data: $('#formorder').serialize(),
                 dataType: 'JSON',
@@ -215,7 +218,7 @@
             $("#btnDelete").click(function () {
                 //点击确认将要删除变量发送到后台
                 $.ajax({
-                    url: "/order/delete/",
+                    url: "/undergrade/delete/",
                     type: "get",
                     data: {
                         'uid': Delete_ID,
@@ -239,7 +242,7 @@
                 var uid = $(this).attr('uid');
                 Edit_ID = uid;
                 $.ajax({
-                    url: '/order/detail/',
+                    url: '/undergrade/detail/',
                     type: 'get',
                     data: {
                         uid: uid,

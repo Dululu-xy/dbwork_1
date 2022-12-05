@@ -41,3 +41,29 @@ def undergrade_add(request):
             'error': form.errors
         }
         return HttpResponse(json.dumps(data, ensure_ascii=False))
+def undergrade_detail(request):
+    uid=request.GET.get('uid')
+    res_dict=models.Undergraduate.objects.filter(id=uid).values().first()
+    print(res_dict)
+    if not res_dict:
+        context={
+            'status':False,
+            'error':'数据不存在'
+        }
+    context={
+        'status':True,
+        'data':res_dict
+    }
+    return HttpResponse(json.dumps(context))
+@csrf_exempt
+def undergrade_edit(request):
+    uid=request.GET.get('uid')
+    row_object=models.Undergraduate.objects.filter(id=uid).first()
+    if not row_object:
+        return JsonResponse({'status':False,'tips':'数据不存在，请刷新重试'})
+    form=Undergrade_form(data=request.POST,instance=row_object)
+    if form.is_valid():
+        form.save()
+        print(form.cleaned_data)
+        return JsonResponse({'status':True})
+    return JsonResponse({'saatus':False,'error':form.errors})

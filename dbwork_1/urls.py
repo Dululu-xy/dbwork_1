@@ -23,5 +23,7 @@ urlpatterns = [
     path('index/', views.login.index,name='index'),
     path('undergrade/list/', views.undergrade.undergrade_list),
     path('undergrade/add/', views.undergrade.undergrade_add),
+    path('undergrade/edit/',views.undergrade.undergrade_edit),
+    path('undergrade/detail/',views.undergrade.undergrade_detail),
     path('test/', views.login.test),
 ]

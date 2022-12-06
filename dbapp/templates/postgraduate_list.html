@@ -1,0 +1,328 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div style="left: 0px">
+        <div>
+            <input type="button" id="btnAdd" value="添加" class="btn btn-primary">
+            <input type="button" id="btnSearch" value="高级检索" class="btn btn-primary">
+            <input type="button" id="btnUpload" value="批量上传" class="btn btn-primary">
+        </div>
+    </div>
+
+
+    <!-- 新建弹出框  两种方式可以调用 一个是按钮属性，一个是通过js方式调用-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="top:20px">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="formorder" novalidate><!--关闭浏览器校验-->
+                        <div class="clearfix">
+                            {% for item in form %}
+                                <div class="col-xs-6">
+                                    <div class="form-group" style="position: relative;margin-bottom: 20px;">
+                                        <label>
+                                            {{ item.label }}
+                                        </label>
+                                        {{ item }}
+                                        <span class="error_msg" style="color:red;position: absolute;"></span>
+                                        <!--输出第一个错误信息-->
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id='btnSave' type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 上传框-->
+    <div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+         style="top:20px">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadform" enctype="multipart/form-data"><!--关闭浏览器校验-->
+                            <input id='myfile' type="file" name="avatar">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id='btnUpSave' type="submit" class="btn btn-primary">上传</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- 警告框 -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4>是否确定删除？</h4>
+                <p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula,
+                    eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+                <p>
+                    <button type="button" id="btnDelete" class="btn btn-danger">确定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true">毕业生信息</span>
+        </div>
+        <div style="float:right;width: 300px">
+            <form method="get">
+                <div class="input-group">
+                    <input type="text" name='q' class="form-control" placeholder="Search for..."
+                           value="{{ search_data }}">
+                    <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+      </span>
+                </div>
+            </form>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>性别</th>
+                    <th>学历</th>
+                    <th>专业</th>
+                    <th>年级</th>
+                    <th>毕业年度</th>
+                    <th>预计就业类型</th>
+                    <th>实际就业类型</th>
+                    <th>就业升学单位</th>
+                    <th>单位所在地</th>
+                    <th>目前状况</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.id }}</td>
+                        <td>{{ obj.get_gender_display }}</td>
+                        <td>{{ obj.get_degree_display }}</td>
+                        <td>{{ obj.get_specialty_display }}</td>
+                        <td>{{ obj.grade }}</td>
+                        <td>{{ obj.year }}</td>
+                        <td>{{ obj.get_pgraduation_display }}</td>
+                        <td>{{ obj.get_rgraduation_display }}</td>
+                        <td>{{ obj.organization }}</td>
+                        <td>{{ obj.location }}</td>
+                        <td>{{ obj.status }}</td>
+                        <td>
+                            <input type="button" uid="{{ obj.id }}" class="btn btn-xs btn-primary btn-edit" value="编辑">
+                            <input type="button" uid="{{ obj.id }}" class="btn  btn-danger btn-xs btn-delete"
+                                   value="删除">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        <ul class="pagination">
+            {{ page_string }}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        var Delete_ID;
+        var Edit_ID;
+        $(function () {
+            bindBtnAddEvent();
+            bindBtnSaveEvent();
+            bindBtnDeleteEvent();
+            bindBtnConfirmDeleteEvent();
+            bindBtnEditEvent();
+            bindBtnSearchEvent();//高级检索按钮
+            bindBtnUploadEvent(); //批量上传按钮
+            bindBtnUpSaveEvent(); //上传框的保存按钮
+        })
+
+        function bindBtnAddEvent() {
+            $("#btnAdd").click(function () {
+                //首先将正在编辑的ID制成空
+                Edit_ID = undefined;
+                $('#formorder')[0].reset();
+                //设置对话框的标题
+                $('#myModalLabel').text('添加信息');
+                $('#myModal').modal('show');
+            });
+        }
+
+        function bindBtnSaveEvent() {
+            $('#btnSave').click(function () {
+                $('.error_msg').empty()
+                if (Edit_ID) {
+                    do_Edit();
+                } else {
+                    do_Add();
+                }
+            });
+        }
+
+        function bindBtnSearchEvent() {
+            $('#btnSearch').click(function () {
+                $('#myModalLabel').text('高级搜索');
+                $('#myModal').modal('show');
+            });
+        }
+
+        function do_Add() {
+            $.ajax({
+                url: '/postgraduate/add/',
+                type: 'post',
+                data: $('#formorder').serialize(),
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        //alert('添加成功')
+                        $('#formorder')[0].reset();//清空表单
+                        $('#myModal').modal('hide');//关闭对话框
+                        location.reload()//这是刷新页面
+                    } else {
+                        $.each(res.error, function (name, data) {
+                            $('#id_' + name).next().text(data[0]);
+                        })
+                    }
+                }
+            })
+        }
+
+        function do_Edit() {
+            $.ajax({
+                url: '/postgraduate/edit/' + '?uid=' + Edit_ID,
+                type: 'post',
+                data: $('#formorder').serialize(),
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        $('#formorder')[0].reset();//清空表单
+                        $('#myModal').modal('hide');//关闭对话框
+                        location.reload()//这是刷新页面
+                    } else {
+                        $.each(res.error, function (name, data) {
+                            $('#id_' + name).next().text(data[0]);
+                        })
+                    }
+                }
+            })
+        }
+
+        function bindBtnDeleteEvent() {
+            $(".btn-delete").click(function () {
+                $('#deleteModal').modal('show');
+                Delete_ID = $(this).attr("uid");
+            });
+        }
+
+        function bindBtnConfirmDeleteEvent() {
+            $("#btnDelete").click(function () {
+                //点击确认将要删除变量发送到后台
+                $.ajax({
+                    url: "/postgraduate/delete/",
+                    type: "get",
+                    data: {
+                        'uid': Delete_ID,
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            location.reload()
+                        } else {
+                            alert("删除失败")
+                        }
+                    }
+
+                })
+            });
+        }
+
+        function bindBtnEditEvent() {
+            $('.btn-edit').click(function () {
+                $('#formorder')[0].reset();
+                var uid = $(this).attr('uid');
+                Edit_ID = uid;
+                $.ajax({
+                    url: '/postgraduate/detail/',
+                    type: 'get',
+                    data: {
+                        uid: uid,
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            $.each(res.data, function (name, value) {
+                                $('#id_' + name).val(value);
+                                $('#myModalLabel').text('编辑订单');
+                                $('#myModal').modal('show');
+                            })
+                        } else {
+                            alert(res.error)
+                        }
+                    }
+                })
+            });
+        }
+
+        function bindBtnUploadEvent() {
+            $("#btnUpload").click(function () {
+                $('#uploadform')[0].reset();
+                //设置对话框的标题
+                $('#uploadModalLabel').text('批量上传');
+                $('#UploadModal').modal('show');
+            });
+        }
+
+        function bindBtnUpSaveEvent() {
+            $('#btnUpSave').click(function () {
+                let obj = new FormData();
+                obj.append('myfile',$('#myfile')[0].files[0])
+                $.ajax({
+                    url: '/postgraduate/upload/',
+                    type: 'post',
+                    data: obj,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if (res.status) {
+                            //$('#uploadform')[0].reset();//清空表单
+                            $('#UploadModal').modal('hide');//关闭对话框
+                            //location.reload()//这是刷新页面
+                        } else {
+                            alert('文件有误');
+                            location.reload()
+                        }
+                    }
+                })
+            });
+        }
+    </script>
+{% endblock %}

@@ -16,15 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from dbapp import views
-from dbapp.views import login,undergrade
+from dbapp.views import login,undergrade,postgraduate
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login.login, name='login'), # 网站首页
     path('index/', views.login.index,name='index'),
+    #本科生操作
     path('undergrade/list/', views.undergrade.undergrade_list),
     path('undergrade/add/', views.undergrade.undergrade_add),
     path('undergrade/edit/',views.undergrade.undergrade_edit),
     path('undergrade/detail/',views.undergrade.undergrade_detail),
     path('undergrade/upload/',views.undergrade.undergrade_upload),
+    #研究生操作
+    path('postgraduate/list/', views.postgraduate.postgrauate_list),
     path('test/', views.login.test),
 ]

@@ -66,4 +66,9 @@ def undergrade_edit(request):
         form.save()
         print(form.cleaned_data)
         return JsonResponse({'status':True})
-    return JsonResponse({'saatus':False,'error':form.errors})
+    return JsonResponse({'status':False,'error':form.errors})
+@csrf_exempt
+def undergrade_upload(request):
+    file_object = request.FILES['myfile']
+    print(file_object)
+    return JsonResponse({'status':True})

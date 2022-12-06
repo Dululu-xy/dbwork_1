@@ -25,5 +25,6 @@ urlpatterns = [
     path('undergrade/add/', views.undergrade.undergrade_add),
     path('undergrade/edit/',views.undergrade.undergrade_edit),
     path('undergrade/detail/',views.undergrade.undergrade_detail),
+    path('undergrade/upload/',views.undergrade.undergrade_upload),
     path('test/', views.login.test),
 ]

@@ -67,8 +67,15 @@ def undergrade_edit(request):
         print(form.cleaned_data)
         return JsonResponse({'status':True})
     return JsonResponse({'status':False,'error':form.errors})
+#对于含有choice的字段，根据输入字段找数据库中存储的字段
+def get_choices_index(choices,str):
+    for i in range(len(choices)):
+        if choices[i][1]==str:
+            return (choices[i][0])
+    return -1
 @csrf_exempt
 def undergrade_upload(request):
     file_object = request.FILES['myfile']
-    print(file_object)
+    model=models.Undergraduate()
+    print (file_object)
     return JsonResponse({'status':True})

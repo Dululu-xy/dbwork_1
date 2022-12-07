@@ -7,7 +7,13 @@ from dbapp.utils.pagination import  Pagination
 from  dbapp.utils.bootstrap import BootstrapModelForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.db import transaction
 import json
+import xlrd
+
+rootPath = str(settings.BASE_DIR)
+
 def undergrade_list(request):
     data_dict = {}
     search_data = request.GET.get('q', "")
@@ -67,8 +73,35 @@ def undergrade_edit(request):
         print(form.cleaned_data)
         return JsonResponse({'status':True})
     return JsonResponse({'status':False,'error':form.errors})
+
+# 文件上传
 @csrf_exempt
 def undergrade_upload(request):
-    file_object = request.FILES['myfile']
-    print(file_object)
+    file_object = request.FILES.get("myfile")
+    file_path = rootPath + "\\dbapp\\tempfiles\\" + 'temp.' + file_object.name.split('.',2)[1]
+    # 读取文件内容并写入到本地
+    f = open(file_path, mode='wb')
+    for chunk in file_object.chunks():
+        f.write(chunk)
+    f.close()
+    read_file = xlrd.open_workbook(filename=file_path,file_contents=file_object.read())
+    file_table = read_file.sheets()[0]
+    file_table_rows = file_table.nrows
+
+    with transaction.atomic():
+        # 读表格数据，从第二行开始，一般第一行都是说明
+        for i in range(1,file_table_rows):
+            temp = models.Undergraduate(year=file_table.cell(i,0).value,
+                                                student_id=file_table.cell(i,1).value,
+                                                gender=file_table.cell(i,2).value,
+                                                graduation=file_table.cell(i,3).value,
+                                                organization=file_table.cell(i,4).value,
+                                                location=file_table.cell(i,5).value,
+                                                affiliation=file_table.cell(i,6).value,
+                                                nature=file_table.cell(i,7).value,
+                                                type=file_table.cell(i,8).value,
+                                                industry=file_table.cell(i,9).value)
+            temp.save()
+        # 判断是否重复添加,用学号来判断?
+
     return JsonResponse({'status':True})

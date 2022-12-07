@@ -155,6 +155,7 @@
     <script type="text/javascript">
         var Delete_ID;
         var Edit_ID;
+        var Search_Flag;
         $(function () {
             bindBtnAddEvent();
             bindBtnSaveEvent();
@@ -170,28 +171,30 @@
             $("#btnAdd").click(function () {
                 //首先将正在编辑的ID制成空
                 Edit_ID = undefined;
+                Search_Flag=undefined;
                 $('#formorder')[0].reset();
                 //设置对话框的标题
                 $('#myModalLabel').text('添加信息');
                 $('#myModal').modal('show');
             });
         }
-
+         function bindBtnSearchEvent() {
+            $('#btnSearch').click(function () {
+                Search_Flag='yes'
+                $('#myModalLabel').text('高级搜索');
+                $('#myModal').modal('show');
+            });
+        }
         function bindBtnSaveEvent() {
             $('#btnSave').click(function () {
                 $('.error_msg').empty()
                 if (Edit_ID) {
                     do_Edit();
-                } else {
+                } else if (Search_Flag){
+                    do_Search();
+                }else {
                     do_Add();
                 }
-            });
-        }
-
-        function bindBtnSearchEvent() {
-            $('#btnSearch').click(function () {
-                $('#myModalLabel').text('高级搜索');
-                $('#myModal').modal('show');
             });
         }
 
@@ -219,6 +222,25 @@
         function do_Edit() {
             $.ajax({
                 url: '/undergrade/edit/' + '?uid=' + Edit_ID,
+                type: 'post',
+                data: $('#formorder').serialize(),
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        $('#formorder')[0].reset();//清空表单
+                        $('#myModal').modal('hide');//关闭对话框
+                        location.reload()//这是刷新页面
+                    } else {
+                        $.each(res.error, function (name, data) {
+                            $('#id_' + name).next().text(data[0]);
+                        })
+                    }
+                }
+            })
+        }
+        function do_Search() {
+            $.ajax({
+                url: '/undergrade/search/',
                 type: 'post',
                 data: $('#formorder').serialize(),
                 dataType: 'JSON',
@@ -270,6 +292,7 @@
                 $('#formorder')[0].reset();
                 var uid = $(this).attr('uid');
                 Edit_ID = uid;
+                Search_Flag=undefined;
                 $.ajax({
                     url: '/undergrade/detail/',
                     type: 'get',

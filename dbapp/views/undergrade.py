@@ -111,8 +111,8 @@ def undergrade_upload(request):
                                         industry=get_choices_index(model.industry_choice,file_table.cell(i,9).value)
                                         )
     return JsonResponse({'status':True})
-class Undergrade_Search_form(BootstrapModelForm):
-    class Meta:
-        model=models.Undergraduate
-        fields='__all__'
-
+@csrf_exempt
+def undergrade_search(request):
+    data=request.POST
+    print(data)
+    return JsonResponse({'status':True})

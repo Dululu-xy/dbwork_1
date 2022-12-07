@@ -98,8 +98,8 @@ class Pagination(object):
         page_str_list.append(prev)
         # 页码
         for i in range(start_page, end_page + 1):
+            self.query_dict.setlist(self.page_param, [i])
             if i == self.page:
-                self.query_dict.setlist(self.page_param, [i])
                 ele = '<li class="active"><a href="?{}">{}</a></li>'.format(self.query_dict.urlencode(), i)
             else:
                 ele = '<li><a href="?{}">{}</a></li>'.format(self.query_dict.urlencode(), i)

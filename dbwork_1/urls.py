@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from dbapp import views
-from dbapp.views import login,undergrade
+from dbapp.views import login,undergrade,postgraduate
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login.login, name='login'), # 网站首页
@@ -27,4 +27,5 @@ urlpatterns = [
     path('undergrade/detail/',views.undergrade.undergrade_detail),
     path('undergrade/upload/',views.undergrade.undergrade_upload),
     path('test/', views.login.test),
+    path('postgraduate/list/',views.postgraduate.postgraduate_list)
 ]

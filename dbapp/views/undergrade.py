@@ -120,6 +120,7 @@ def undergrade_search(request):
 def undergrade_deleteAll(request):
     data=request.POST
     print(data)
+    return JsonResponse({'status':True})
 #本科生就业信息统计
 def undergrade_chart(request):
     return render(request,'chart_undergrade.html')

@@ -397,12 +397,13 @@
                     data: {
                         'vals': valArr
                     },
-                    success: function () {
-                        alert("删除成功");
+                    success: function (res) {
+                      if (res.status) {
+                            location.reload()
+                        } else {
+                            alert("删除失败")
+                        }
                     },
-                    error: function () {
-                        alert("删除失败");
-                    }
                 })
             } else {
                 var error_m = "请选择数据";

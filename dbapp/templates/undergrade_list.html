@@ -5,6 +5,7 @@
             <input type="button" id="btnAdd" value="添加" class="btn btn-primary">
             <input type="button" id="btnSearch" value="高级检索" class="btn btn-primary">
             <input type="button" id="btnUpload" value="批量上传" class="btn btn-primary">
+            <input type="button" id="btnDeleteMany" value="批量删除" class="btn btn-danger">
         </div>
     </div>
 
@@ -57,7 +58,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="uploadform" enctype="multipart/form-data"><!--关闭浏览器校验-->
-                            <input id='myfile' type="file" name="avatar">
+                        <input id='myfile' type="file" name="avatar">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -106,6 +107,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th><input type="checkbox" id="checkAll" onclick="checkAll()"></th>
                     <th>ID</th>
                     <th>年度</th>
                     <th>学号</th>
@@ -123,6 +125,7 @@
                 <tbody>
                 {% for obj in queryset %}
                     <tr>
+                        <td><input type="checkbox" onclick="checkOne()" value="{{ obj.id }}" name="item"></td>
                         <td>{{ obj.id }}</td>
                         <td>{{ obj.year }}</td>
                         <td>{{ obj.student_id }}</td>
@@ -160,6 +163,7 @@
             bindBtnAddEvent();
             bindBtnSaveEvent();
             bindBtnDeleteEvent();
+             bindBtnDeleteAllEvent();
             bindBtnConfirmDeleteEvent();
             bindBtnEditEvent();
             bindBtnSearchEvent();//高级检索按钮
@@ -171,28 +175,30 @@
             $("#btnAdd").click(function () {
                 //首先将正在编辑的ID制成空
                 Edit_ID = undefined;
-                Search_Flag=undefined;
+                Search_Flag = undefined;
                 $('#formorder')[0].reset();
                 //设置对话框的标题
                 $('#myModalLabel').text('添加信息');
                 $('#myModal').modal('show');
             });
         }
-         function bindBtnSearchEvent() {
+
+        function bindBtnSearchEvent() {
             $('#btnSearch').click(function () {
-                Search_Flag='yes'
+                Search_Flag = 'yes'
                 $('#myModalLabel').text('高级搜索');
                 $('#myModal').modal('show');
             });
         }
+
         function bindBtnSaveEvent() {
             $('#btnSave').click(function () {
                 $('.error_msg').empty()
                 if (Edit_ID) {
                     do_Edit();
-                } else if (Search_Flag){
+                } else if (Search_Flag) {
                     do_Search();
-                }else {
+                } else {
                     do_Add();
                 }
             });
@@ -238,6 +244,7 @@
                 }
             })
         }
+
         function do_Search() {
             $.ajax({
                 url: '/undergrade/search/',
@@ -292,7 +299,7 @@
                 $('#formorder')[0].reset();
                 var uid = $(this).attr('uid');
                 Edit_ID = uid;
-                Search_Flag=undefined;
+                Search_Flag = undefined;
                 $.ajax({
                     url: '/undergrade/detail/',
                     type: 'get',
@@ -327,7 +334,7 @@
         function bindBtnUpSaveEvent() {
             $('#btnUpSave').click(function () {
                 let obj = new FormData();
-                obj.append('myfile',$('#myfile')[0].files[0])
+                obj.append('myfile', $('#myfile')[0].files[0])
                 $.ajax({
                     url: '/undergrade/upload/',
                     type: 'post',
@@ -345,6 +352,62 @@
                         }
                     }
                 })
+            });
+        }
+
+        function checkAll() {
+            var all = document.getElementById("checkAll");
+
+            if (all.checked == true) {
+                var ones = document.getElementsByName("item");
+                for (var i = 0; i <= ones.length; i++) {
+                    ones[i].checked = true;
+                }
+            } else {
+                var ones = document.getElementsByName("item");
+                for (var i = 0; i <= ones.length; i++) {
+                    ones[i].checked = false;
+                }
+            }
+        }
+
+        function checkOne() {
+            var one = document.getElementsByName("item");
+            one.checked = true;
+        }
+
+        function bindBtnDeleteAllEvent() {
+            $('#btnDeleteMany').click(function (){
+                var valArr = [];
+            var ones = document.getElementsByName('item');
+            for (var i = 0; i < ones.length; i++) {
+                if (ones[i].checked == true) {
+                    valArr[i]= ones[i].value
+                }
+            }
+            if (valArr.length != 0) {
+                // var vals = valArr.join(',');
+                // alert(valArr);
+                $.ajax({　　　　　
+                    url: "/undergrade/deleteall/",　　
+                    type: 'POST',
+                    contenType: 'application/json',　　　　　　　//这个，ajax会将结果后边加个[]，例如{'vals[]':[4,6,8]}
+                    traditional: true,　　　　　　  //不加这个，会报服务器终止了一个在运行的程序
+                    async: false,
+                    data: {
+                        'vals': valArr
+                    },
+                    success: function () {
+                        alert("删除成功");
+                    },
+                    error: function () {
+                        alert("删除失败");
+                    }
+                })
+            } else {
+                var error_m = "请选择数据";
+                alert(error_m);
+            }
             });
         }
     </script>

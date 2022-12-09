@@ -1,0 +1,165 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">折线图</div>
+            <div class="panel-body">
+                <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+           <div id="m1" style="width: 100%;height:400px;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">柱状图</div>
+                    <div class="panel-body">
+                        <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+                        <div id="m2" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">饼图</div>
+                    <div class="panel-body">
+                        <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+                        <div id="m3" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <meta charset="utf-8"/>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            initBar();
+            initPie();
+            initLine();
+        })
+
+        function initBar() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('m2'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '就业类型统计'
+                },
+                tooltip: {},
+                legend: {
+                    data: []
+                },
+                xAxis: {
+                    data: [],
+                    "axisLabel":{
+    		interval: 0},
+                },
+                yAxis: {},
+                series: []
+            };
+            $.ajax({
+                url: '/chart/bar/',
+                type: 'get',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        option.series = res.data.series
+                        option.legend.data = res.data.legend
+                        option.xAxis.data = res.data.xaxis
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                    }
+                }
+            })
+        }
+
+        function initPie() {
+            var chartDom = document.getElementById('m3');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: 'Referer of a Website',
+                    subtext: 'Fake Data',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    bottom:0
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            $.ajax({
+                url:'/chart/pie/',
+                type:'get',
+                dataType:'JSON',
+                success:function (res){
+                    if(res.status){
+                        option.series[0].data=res.data;
+                        myChart.setOption(option);
+                    }
+                }
+            })
+
+        }
+        function initLine(){
+
+var chartDom = document.getElementById('m1');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  xAxis: {
+    type: 'category',
+    data: []
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [],
+      type: 'line'
+    }
+  ]
+};
+$.ajax({
+                url:'/chart/line/',
+                type:'get',
+                dataType:'JSON',
+                success:function (res){
+                    if(res.status){
+                        option.xAxis.data=res.data.xaxis;
+                        option.series[0].data=res.data.series;
+                        myChart.setOption(option);
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock js %}

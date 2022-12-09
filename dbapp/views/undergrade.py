@@ -116,3 +116,45 @@ def undergrade_search(request):
     data=request.POST
     print(data)
     return JsonResponse({'status':True})
+@csrf_exempt
+def undergrade_deleteAll(request):
+    data=request.POST
+    print(data)
+#本科生就业信息统计
+def undergrade_chart(request):
+    return render(request,'chart_undergrade.html')
+#就业类型按性别统计
+def chart_bar(request):
+    data_boy=[0]*6
+    data_girl=[0]*6
+    liboy =models.Undergraduate.objects.filter(gender=1).values('graduation')
+    for li in liboy:
+        data_boy[li['graduation']-1]+=1
+    ligirl = models.Undergraduate.objects.filter(gender=2).values('graduation')
+    for li in ligirl:
+        data_girl[li['graduation'] - 1] += 1
+    print(data_boy,data_girl)
+    series= [
+                {
+                    "name": '男',
+                    "type": 'bar',
+                    "data": data_boy
+                },
+                {
+                    "name": '女',
+                    "type": 'bar',
+                    "data": data_girl
+                }
+            ]
+    xaxis=['升学','非派遣/劳动合同','签约就业','出国学习','定向就业','灵活就业']
+    legend=['男','女']
+    result={
+        "status":True,
+        'data':{
+            'legend':legend,
+            'series':series,
+            'xaxis':xaxis,
+        }
+    }
+    return JsonResponse(result)
+#就业类型按

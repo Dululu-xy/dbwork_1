@@ -116,6 +116,25 @@ def undergrade_upload(request):
 def undergrade_search(request):
     data=request.POST
     print(data)
+    # __icontains 模糊匹配
+    searchlist = models.Undergraduate.objects.filter(year__icontains=data.get('year'),
+                                        student_id__icontains=data.get('student_id'),
+                                        gender__icontains=data.get('gender'),
+                                        graduation__icontains=data.get('graduation'),
+                                        organization__icontains=data.get('organization'),
+                                        location__icontains=data.get('location'),
+                                        affiliation__icontains=data.get('affiliation'),
+                                        nature__icontains=data.get('nature'),
+                                        type__icontains=data.get('type'),
+                                        industry__icontains=data.get('industry'))
+    print(searchlist)
+    form=Undergrade_form()
+    page_object = Pagination(request, searchlist)
+    context = {
+        "form": form,
+        "queryset": page_object.page_queryset,  # 分完页的数据
+        "page_string": page_object.html() }#页码html
+    return render(request, 'undergrade_list.html',context)
     return JsonResponse({'status':True})
 @csrf_exempt
 def undergrade_deleteAll(request):

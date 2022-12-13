@@ -13,16 +13,33 @@ import json
 import xlrd
 
 rootPath = str(settings.BASE_DIR)
-
+@csrf_exempt
 def undergrade_list(request):
-    data_dict = {}
-    search_data = request.GET.get('q', "")
-    if search_data:  # 如果不为空则存在搜索内容
-        data_dict['student_id__contains'] = search_data
-    # 按照级别排序
-    data_list = models.Undergraduate.objects.filter(**data_dict)
+    #首先检验是否是高级查询
+    if(request.method=='POST'):
+        data = request.POST
+        print(data)
+        # __icontains 模糊匹配
+        searchlist = models.Undergraduate.objects.filter(year__icontains=data.get('year'),
+                                                         student_id__icontains=data.get('student_id'),
+                                                         gender__icontains=data.get('gender'),
+                                                         graduation__icontains=data.get('graduation'),
+                                                         organization__icontains=data.get('organization'),
+                                                         location__icontains=data.get('location'),
+                                                         affiliation__icontains=data.get('affiliation'),
+                                                         nature__icontains=data.get('nature'),
+                                                         type__icontains=data.get('type'),
+                                                         industry__icontains=data.get('industry'))
+    else:
+        data_dict = {}
+        print('youare list')
+        search_data = request.GET.get('q', "")
+        if search_data:  # 如果不为空则存在搜索内容
+            data_dict['student_id__contains'] = search_data
+        # 按照级别排序
+        searchlist = models.Undergraduate.objects.filter(**data_dict)
     form=Undergrade_form()
-    page_object = Pagination(request, data_list)
+    page_object = Pagination(request, searchlist)
     context = {
         "form": form,
         "queryset": page_object.page_queryset,  # 分完页的数据
@@ -112,30 +129,31 @@ def undergrade_upload(request):
                                         industry=get_choices_index(model.industry_choice,file_table.cell(i,9).value)
                                         )
     return JsonResponse({'status':True})
-@csrf_exempt
-def undergrade_search(request):
-    data=request.POST
-    print(data)
-    # __icontains 模糊匹配
-    searchlist = models.Undergraduate.objects.filter(year__icontains=data.get('year'),
-                                        student_id__icontains=data.get('student_id'),
-                                        gender__icontains=data.get('gender'),
-                                        graduation__icontains=data.get('graduation'),
-                                        organization__icontains=data.get('organization'),
-                                        location__icontains=data.get('location'),
-                                        affiliation__icontains=data.get('affiliation'),
-                                        nature__icontains=data.get('nature'),
-                                        type__icontains=data.get('type'),
-                                        industry__icontains=data.get('industry'))
-    print(searchlist)
-    form=Undergrade_form()
-    page_object = Pagination(request, searchlist)
-    context = {
-        "form": form,
-        "queryset": page_object.page_queryset,  # 分完页的数据
-        "page_string": page_object.html() }#页码html
-    return render(request, 'undergrade_list.html',context)
-    return JsonResponse({'status':True})
+# @csrf_exempt
+# def undergrade_search(request):
+#     data=request.POST
+#     print(data)
+#     # __icontains 模糊匹配
+#     searchlist = models.Undergraduate.objects.filter(year__icontains=data.get('year'),
+#                                         student_id__icontains=data.get('student_id'),
+#                                         gender__icontains=data.get('gender'),
+#                                         graduation__icontains=data.get('graduation'),
+#                                         organization__icontains=data.get('organization'),
+#                                         location__icontains=data.get('location'),
+#                                         affiliation__icontains=data.get('affiliation'),
+#                                         nature__icontains=data.get('nature'),
+#                                         type__icontains=data.get('type'),
+#                                         industry__icontains=data.get('industry'))
+#     print(len(searchlist))
+#     form=Undergrade_form()
+#     page_object = Pagination(request, searchlist)
+#     context = {
+#         "status": True,
+#         "form": form,
+#         "queryset": page_object.page_queryset,  # 分完页的数据
+#         "page_string": page_object.html() }#页码html
+#     #return render(request, 'undergrade_list.html',context)
+#     return JsonResponse(context)
 @csrf_exempt
 def undergrade_deleteAll(request):
     data=request.POST

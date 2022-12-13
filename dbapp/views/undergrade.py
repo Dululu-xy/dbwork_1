@@ -85,6 +85,7 @@ def get_choices_index(choices,str):
 @csrf_exempt
 def undergrade_upload(request):
     file_object = request.FILES.get("myfile")
+    print(file_object)
     file_path = rootPath + "\\dbapp\\tempfiles\\" + 'temp.' + file_object.name.split('.',2)[1]
     # 读取文件内容并写入到本地
     f = open(file_path, mode='wb')
@@ -120,6 +121,11 @@ def undergrade_search(request):
 def undergrade_deleteAll(request):
     data=request.POST
     print(data)
+    deletelist = data.getlist('vals')
+    print(deletelist)
+    for i in range(len(deletelist)):
+        print(deletelist[i])
+        models.Undergraduate.objects.filter(id=int(deletelist[i])).delete()
     return JsonResponse({'status':True})
 #本科生就业信息统计
 def undergrade_chart(request):

@@ -26,13 +26,25 @@ urlpatterns = [
     path('undergrade/edit/',views.undergrade.undergrade_edit),
     path('undergrade/detail/',views.undergrade.undergrade_detail),
     path('undergrade/upload/',views.undergrade.undergrade_upload),
+    path('undergrade/delete/', views.undergrade.undergrade_delete),
     path('undergrade/deleteall/',views.undergrade.undergrade_deleteAll),
     path('test/', views.login.test),
     path('postgraduate/list/',views.postgraduate.postgraduate_list),
     #统计
     path('undergrade/chart/',views.undergrade.undergrade_chart),
-    #样例
     path('chart/bar/', undergrade.chart_bar),
-    path('chart/pie/', chart.chart_pie),
-    path('chart/line/', chart.chart_line),
+    path('chart/pie/', undergrade.chart_pie),
+
+
+    path('postgraduate/list/', views.postgraduate.postgraduate_list),
+    path('postgraduate/add/', views.postgraduate.postgraduate_add),
+    path('postgraduate/edit/', views.postgraduate.postgraduate_edit),
+    path('postgraduate/detail/', views.postgraduate.postgraduate_detail),
+    path('postgraduate/upload/', views.postgraduate.postgraduate_upload),
+    path('postgraduate/delete/',views.postgraduate.postgraduate_delete),
+    path('postgraduate/deleteall/', views.postgraduate.postgraduate_deleteAll),
+    # 统计
+    path('postgraduate/chart/', views.postgraduate.postgraduate_chart),
+    path('pchart/bar/', views.postgraduate.chart_bar),
+    path('pchart/pie/', views.postgraduate.chart_pie),
 ]

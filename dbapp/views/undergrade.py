@@ -154,6 +154,10 @@ def undergrade_upload(request):
 #         "page_string": page_object.html() }#页码html
 #     #return render(request, 'undergrade_list.html',context)
 #     return JsonResponse(context)
+def undergrade_delete(request):
+    uid=request.GET.get('uid')
+    models.Undergraduate.objects.filter(id=uid).delete()
+    return JsonResponse({'status': True})
 @csrf_exempt
 def undergrade_deleteAll(request):
     data=request.POST
@@ -201,4 +205,30 @@ def chart_bar(request):
         }
     }
     return JsonResponse(result)
-#就业类型按
+#就业按行业性质统计
+def chart_pie(request):
+    data = [0] * 12
+    lis= models.Undergraduate.objects.all().values('industry')
+    for li in lis:
+        value=li['industry']
+        if value==-1:
+            continue
+        data[value- 1] += 1
+    result={
+        'status':True,
+        'data':[
+            {'value': data[0], 'name': '制造业'},
+            {'value': data[1], 'name': '信息传输软件和信息技术服务业'},
+            {'value': data[2], 'name': '采矿业'},
+            {'value': data[3], 'name': '交通运输、仓储和邮政业'},
+            {'value': data[4], 'name': '租赁和商业服务业'},
+            {'value': data[5], 'name': '金融业'},
+            {'value': data[6], 'name': '建筑业'},
+            {'value': data[7], 'name': '科学研究和技术服务业'},
+            {'value': data[8], 'name': '军队'},
+            {'value': data[9], 'name': '教育'},
+            {'value': data[10], 'name': '其他'},
+            {'value': data[11], 'name': '制造业'},
+             ]
+    }
+    return JsonResponse(result)

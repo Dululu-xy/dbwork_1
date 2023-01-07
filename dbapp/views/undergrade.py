@@ -232,3 +232,25 @@ def chart_pie(request):
              ]
     }
     return JsonResponse(result)
+#就业按单位性质性质统计
+def chart_pie2(request):
+    data = [0] * 12
+    lis= models.Undergraduate.objects.all().values('type')
+    for li in lis:
+        value=li['type']
+        if value==-1:
+            continue
+        data[value- 1] += 1
+    result={
+        'status':True,
+        'data':[
+            {'value': data[0], 'name': '211院校'},
+            {'value': data[1], 'name': '985院校'},
+            {'value': data[2], 'name': '世界500强'},
+            {'value': data[3], 'name': '中国五百强'},
+            {'value': data[4], 'name': '公务员'},
+            {'value': data[5], 'name': '科研院所'},
+            {'value': data[6], 'name': '其他企事业'},
+             ]
+    }
+    return JsonResponse(result)

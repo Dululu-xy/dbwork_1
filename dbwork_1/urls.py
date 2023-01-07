@@ -34,8 +34,7 @@ urlpatterns = [
     path('undergrade/chart/',views.undergrade.undergrade_chart),
     path('chart/bar/', undergrade.chart_bar),
     path('chart/pie/', undergrade.chart_pie),
-
-
+    path('uchart/pie2/', undergrade.chart_pie2),
     path('postgraduate/list/', views.postgraduate.postgraduate_list),
     path('postgraduate/add/', views.postgraduate.postgraduate_add),
     path('postgraduate/edit/', views.postgraduate.postgraduate_edit),
@@ -47,4 +46,5 @@ urlpatterns = [
     path('postgraduate/chart/', views.postgraduate.postgraduate_chart),
     path('pchart/bar/', views.postgraduate.chart_bar),
     path('pchart/pie/', views.postgraduate.chart_pie),
+    path('pchart/pie2/', views.postgraduate.chart_pie2),
 ]

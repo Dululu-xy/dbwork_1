@@ -21,7 +21,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">折线图</div>
+                    <div class="panel-heading"></div>
                     <div class="panel-body">
                         <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
                         <div id="m3" style="width: 100%;height:400px;"></div>
@@ -39,7 +39,7 @@
         $(function () {
             initBar();
             initPie();
-            initLine();
+            initPie2()
         })
 
         function initBar() {
@@ -87,7 +87,7 @@
             option = {
                 title: {
                     text: '按行业统计',
-                    subtext: '',
+                    subtext: '本科生',
                     left: 'center'
                 },
                 tooltip: {
@@ -127,39 +127,53 @@
             })
 
         }
-        function initLine(){
+        function initPie2() {
+            var chartDom = document.getElementById('m3');
+            var myChart = echarts.init(chartDom);
+            var option;
 
-var chartDom = document.getElementById('m3');
-var myChart = echarts.init(chartDom);
-var option;
-
-option = {
-  xAxis: {
-    type: 'category',
-    data: []
-  },
-  yAxis: {
-    type: 'value'
-  },
-  series: [
-    {
-      data: [],
-      type: 'line'
-    }
-  ]
-};
-$.ajax({
-                url:'/chart/line/',
+            option = {
+                title: {
+                    text: '按单位性质统计',
+                    subtext: '本科生',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    bottom:0
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            $.ajax({
+                url:'/uchart/pie2/',
                 type:'get',
                 dataType:'JSON',
                 success:function (res){
                     if(res.status){
-                        option.xAxis.data=res.data.xaxis;
-                        option.series[0].data=res.data.series;
+                        option.series[0].data=res.data;
                         myChart.setOption(option);
                     }
                 }
             })
+
         }
     </script>
 {% endblock js %}

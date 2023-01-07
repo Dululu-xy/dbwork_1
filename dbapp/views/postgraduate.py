@@ -14,7 +14,7 @@ import xlrd
 
 from dbapp.views.undergrade import rootPath
 
-
+@csrf_exempt
 def postgraduate_list(request):
     # 首先检验是否是高级查询
     if (request.method == 'POST'):
@@ -37,7 +37,7 @@ def postgraduate_list(request):
         print('youare list')
         search_data = request.GET.get('q', "")
         if search_data:  # 如果不为空则存在搜索内容
-            data_dict['year__contains'] = search_data
+            data_dict['id__contains'] = search_data
         # 按照级别排序
         searchlist = models.Postgraduate.objects.filter(**data_dict)
     form = Postgraduate_form()
@@ -120,7 +120,7 @@ def postgraduate_upload(request):
         # 读表格数据，从第二行开始，一般第一行都是说明
         for i in range(1,file_table_rows):
             model=models.Postgraduate()
-            models.Undergraduate.objects.get_or_create(gender=get_choices_index(model.gender_choice,file_table.cell(i,0).value),
+            models.Postgraduate.objects.get_or_create(gender=get_choices_index(model.gender_choice,file_table.cell(i,0).value),
                                         degree=get_choices_index(model.degree_choice,file_table.cell(i,1).value),
                                         specialty=get_choices_index(model.specialty_choice,file_table.cell(i,2).value),
                                         grade=file_table.cell(i,3).value,
@@ -227,3 +227,27 @@ def chart_pie(request):
              ]
     }
     return JsonResponse(result)
+def chart_pie2(request):
+    data = [0] * 9
+    lis= models.Postgraduate.objects.all().values('rgraduation')
+    for li in lis:
+        value=li['rgraduation']
+        if value==-1:
+            continue
+        data[value- 1] += 1
+    result={
+        'status':True,
+        'data':[
+            {'value': data[0], 'name': '劳动合同'},
+            {'value': data[1], 'name': '协议就业'},
+            {'value': data[2], 'name': '未就业'},
+            {'value': data[3], 'name': '非派遣'},
+            {'value': data[4], 'name': '升学'},
+            {'value': data[5], 'name': '自主创业'},
+            {'value': data[6], 'name': '出国'},
+            {'value': data[7], 'name': '定向'},
+            {'value': data[8], 'name': '部队文职'},
+             ]
+    }
+    return JsonResponse(result)
+

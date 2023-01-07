@@ -4,7 +4,7 @@ from django.db import models
 from django.db import models
 #本科生表
 class Undergraduate(models.Model):
-    year=models.CharField(verbose_name='年度',max_length=4)
+    year=models.IntegerField(verbose_name='年度')
     student_id=models.CharField(verbose_name='学号',max_length=10)
     gender_choice = (
         (1, "男"),
@@ -14,10 +14,12 @@ class Undergraduate(models.Model):
     graduation_choice = (
         (1, '升学'),
         (2, '非派遣/劳动合同'),
-        (3, '签约就业'),
-        (4, '出国学习'),
-        (5,'定向就业'),
-        (6,'灵活就业')
+        (3, '非派遣'),
+        (4, '签约就业'),
+        (5, '出国学习'),
+        (6,'定向就业'),
+        (7,'灵活就业'),
+        (8,'三资企业'),
     )
     graduation = models.SmallIntegerField(verbose_name='毕业去向', choices=graduation_choice)
     organization=models.CharField(verbose_name='实际单位',max_length=100,null=True,blank=True)
@@ -33,27 +35,35 @@ class Undergraduate(models.Model):
         (7, '艰苦行业企业'),
         (8, '其他企业'),
         (9, '未就业'),
+        (10, '党政机关'),
+        (11, '部队'),
     )
     nature = models.SmallIntegerField(verbose_name='单位性质', choices=nature_choice)
     type_choice = (
         (1, '211院校'),
         (2, '985院校'),
         (3, '世界500强'),
-        (4, '其他'),
+        (4, '中国五百强'),
+        (5, '公务员'),
+        (6, '科研院所'),
+        (7, '其他企事业'),
+        (8, '其他'),
     )
     type = models.SmallIntegerField(verbose_name='单位类型', choices=type_choice)
     industry_choice = (
         (1, '制造业'),
-        (2, '信息传输软件和信息技术服务业'),
+        (2, '信息传输、软件和信息技术服务业'),
         (3, '采矿业'),
         (4, '交通运输、仓储和邮政业'),
         (5, '租赁和商业服务业'),
         (6, '金融业'),
         (7, '建筑业'),
         (8, '科学研究和技术服务业'),
-        (9, '科学研究和技术服务业'),
+        (9, '居民服务、修理和其他服务业'),
         (10, '军队'),
         (11, '教育'),
+        (12, '公共管理、社会保障和社会组织'),
+        (12, '批发和零售业'),
         (12, '其他'),
     )
     industry = models.SmallIntegerField(verbose_name='行业性质', choices=industry_choice)
@@ -81,8 +91,8 @@ class Postgraduate(models.Model):
     )  # 使用的时候使用get_gender_display还原
     specialty = models.SmallIntegerField(verbose_name='专业', choices=specialty_choice)
 
-    grade = models.CharField(verbose_name='年级', max_length=4)
-    year = models.CharField(verbose_name='毕业年度', max_length=4)
+    grade = models.IntegerField(verbose_name='年级')
+    year = models.IntegerField(verbose_name='毕业年度')
 
     pgraduation_choice = (
         (1, '劳动合同'),
